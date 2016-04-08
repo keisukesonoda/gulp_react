@@ -17,7 +17,6 @@ gulp.task 'browserify', ->
 		# 	})
 		# es6
 		.transform babelify, { presets: ['es2015'] }
-
 		.bundle()
 		# .on('error', (err) ->
 		# 	console.log 'Error : ' + err.message
