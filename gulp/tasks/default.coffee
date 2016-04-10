@@ -11,27 +11,38 @@ gulp.task 'default', ['browserify', 'server', 'watch']
 browser = require 'browser-sync'
 
 gulp.task 'server', ->
-	browser({
-		server:
-			baseDir: [
-				"#{conf.path.dest.root}"
-			]
-		port: 8000
-		open: false
-		reloadDelay: conf.params.reloadDelay
-	})
+  browser({
+    server:
+      baseDir: [
+        "#{conf.path.dest.root}"
+      ]
+    port: 8000
+    open: false
+    reloadDelay: conf.params.reloadDelay
+  })
 
+
+gulp.task 'reload', ->
+  browser.reload()
 
 
 
 ### @watch ###
 gulp.task 'watch', ->
-	# jsx
-	gulp.watch [
-		"#{conf.path.src.comp}/**/**"
-		], ['browserify']
-	# reload
-	# gulp.watch "#{conf.path.src.root}/**", ['reload']
+  # browserify
+  gulp.watch [
+    "#{conf.path.src.comp}/**/**"
+  ], ['browserify']
+  # reload
+  gulp.watch [
+    "#{conf.path.dest.root}/**/**"
+  ], ['reload']
+
+
+
+
+
+
 
 
 
