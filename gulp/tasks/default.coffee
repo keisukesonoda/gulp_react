@@ -36,6 +36,7 @@ gulp.task 'watch', ->
   # reload
   gulp.watch [
     "#{conf.path.dest.root}/**/**"
+    "!#{conf.path.dest.root}/**/**"
   ], ['reload']
 
 

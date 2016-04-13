@@ -60,7 +60,7 @@ class App extends React.Component {
 
         <div className="wrap-comment-box">
           {/* <CommentBox data={DATA} /> */}
-          <CommentBox url="api/comments" />
+          <CommentBox url="api/comments.json" pollInterval={2000} />
         </div>
 
       </div>

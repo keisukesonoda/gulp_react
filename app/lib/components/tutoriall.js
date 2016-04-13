@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 /*
 １つのコンポーネントファイルでexportできるのクラスは１つだけ
@@ -12,6 +13,28 @@ export default class CommentBox extends React.Component {
     this.state = {
       data: [],
     };
+  }
+  loadCommentsFromServer() {
+    // ajaxの代わり
+    axios.get(this.props.url, {
+      responseType: 'json',
+    })
+    .then((response) => {
+      // success
+      this.setState({
+        data: response.data,
+      });
+    })
+    .catch((response) => {
+      // fail
+      console.log(this.props.url, response);
+    });
+  }
+  componentDidMount() {
+    this.loadCommentsFromServer();
+    // setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+    // .bind(this)してあげないと2週目以降でthisがとれなくなってしまう。
+    setInterval(this.loadCommentsFromServer.bind(this), this.props.pollInterval);
   }
   render() {
     return (
@@ -48,11 +71,11 @@ class CommentList extends React.Component {
     super(props);
   }
   render() {
-    // map関数を使うことでまわしてくれる？
+    // map関数を使うことでまわしてくれる
     const commentNodes = this.props.data.map( (comment) => {
       return (
         // keyを指定しないとwarningが出る
-        <Comment key={comment.id} author={comment.author}>{comment.text}</Comment>
+        <Comment key={comment.ID} author={comment.author}>{comment.text}</Comment>
       );
     });
     return (
