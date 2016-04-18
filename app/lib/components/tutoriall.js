@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import axios from 'axios';
 
 /*
@@ -30,6 +31,25 @@ export default class CommentBox extends React.Component {
       console.log(this.props.url, response);
     });
   }
+  _handleCommentSubmit(comment) {
+    // TODO: サーバに送信、リストをリフレッシュ
+    let comments = this.state.data;
+    let newComments = comments.concat([comment]);
+    this.setState({data: newComments});
+    // axios.post(this.props.url, {
+    //   data: comment,
+    // })
+    // .then((response) => {
+    //   // success
+    //   this.setState({
+    //     data: response.data,
+    //   });
+    // })
+    // .catch((response) => {
+    //   //fail
+    //   console.log('fail: ', this.props.url, response);
+    // })
+  }
   componentDidMount() {
     this.loadCommentsFromServer();
     // setInterval(this.loadCommentsFromServer, this.props.pollInterval);
@@ -40,21 +60,18 @@ export default class CommentBox extends React.Component {
     return (
       <div>
         <h2>Comments</h2>
-        {/* <Hoge /> */}
-        {/* <CommentList data={this.props.data} /> */}
         <CommentList data={this.state.data} />
-        <CommentForm />
+        <CommentForm onCommentSubmit={this._handleCommentSubmit.bind(this)} />
       </div>
     );
   }
 }
 
 
-
 class Hoge extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
   render() {
     return (
       <div className="hoge">
@@ -65,17 +82,17 @@ class Hoge extends React.Component {
 }
 
 
-
 class CommentList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
   render() {
     // map関数を使うことでまわしてくれる
     const commentNodes = this.props.data.map( (comment) => {
       return (
         // keyを指定しないとwarningが出る
-        <Comment key={comment.ID} author={comment.author}>{comment.text}</Comment>
+        // <Comment key={comment.ID} author={comment.author}>{comment.text}</Comment>
+        <Comment author={comment.author}>{comment.text}</Comment>
       );
     });
     return (
@@ -89,23 +106,39 @@ class CommentList extends React.Component {
 
 
 class CommentForm extends React.Component {
-  constructor(props) {
-    super(props);
+  // constructor(props) {
+  //   super(props);
+  // }
+  _handleSubmit(e) {
+    e.preventDefault();
+    let author = ReactDOM.findDOMNode(this.refs.author).value.trim();
+    let text = ReactDOM.findDOMNode(this.refs.text).value.trim();
+    if (!text || !author) {
+      return;
+    }
+    // CommentBox内のonCommentSubmitを叩く
+    this.props.onCommentSubmit({ author: author, text: text });
+    ReactDOM.findDOMNode(this.refs.author).value = '';
+    ReactDOM.findDOMNode(this.refs.text).value = '';
+    return;
   }
   render() {
     return (
-      <div className="commentForm">
-        Hello, world! I am a CommentForm.
-      </div>
+      // イベント関数へ渡す時に.bind(this)してやる
+      <form className="commentForm" onSubmit={this._handleSubmit.bind(this)}>
+        <input type="text" placeholder="your name" ref="author" />
+        <input type="text" placeholder="say something..." ref="text" />
+        <input type="submit" value="Post" />
+      </form>
     );
   }
 }
 
 
 class Comment extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
   render() {
     return (
       <div className="comment">
