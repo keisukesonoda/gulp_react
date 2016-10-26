@@ -32,6 +32,7 @@ class App extends React.Component {
     }
   }
   render() {
+    console.log(this.props.hello);
     // console.log(process.env.NODE_ENV);
     const list = [1, 2, 3].map(item => {
       const str = `abc${item}`;
@@ -70,4 +71,4 @@ class App extends React.Component {
 }
 
 // app クラスを描画
-ReactDOM.render(<App />, document.getElementById('contents'));
+ReactDOM.render(<App hello="hello world!!!" />, document.getElementById('contents'));
